@@ -1,0 +1,24 @@
+function createEmailMasterSheet() {
+  var activeSheet;
+  var spreadSheet;
+  var spreadsheetName = 'type_the_file_name';
+  var it = DriveApp.getFilesByName(spreadsheetName);
+  if(!it.hasNext()){
+    var ss = SpreadsheetApp.create('type_the_file_name');
+    var id = ss.getId();
+    spreadSheet = DriveApp.getFileById(id);
+    activeSheet = SpreadsheetApp.open(spreadSheet);
+  }
+  if (it.hasNext()){
+      var file = it.next();
+      activeSheet = SpreadsheetApp.openById(file.getId());
+   }
+   var sheet = activeSheet.getSheets()[0];
+   var contacts = ContactsApp.getContacts();
+   var groups = ContactsApp.getContactGroups();
+   for(var i = 0;i < contacts.length;i++){
+      sheet.getRange(i+1, 1).setValue(contacts[i].getFullName());
+      sheet.getRange(i+1, 2).setValue(contacts[i].getPrimaryEmail());
+   }
+};
+
